@@ -1,5 +1,5 @@
 const centerX = canvas.width / 2;
-const centerY = canvas.height / 2;
+const centerY = canvas.height / 2-150;
 let ctx = document.getElementById("canvas").getContext("2d");
 function getNewMatrix(part) {
     let newM = [];
@@ -23,12 +23,13 @@ function MultiplyMatrix(A, B) {
             A[i][k] = t;
         }
     }
+   //console.log(A);
     return A;
 }
 class Cat {
     draw(part) {
         let arr = getNewMatrix(part);
-        console.log(arr)
+        //console.log(arr)
         for (let i = 0; i < arr.length-1; i+=2) {
             ctx.beginPath();
             ctx.strokeStyle = "black";
@@ -36,7 +37,7 @@ class Cat {
             ctx.moveTo(arr[i][0], arr[i][1]); //координаты начала линии
             ctx.lineTo(arr[i + 1][0], arr[i + 1][1]); // координаты конца линии
             ctx.stroke();
-            console.log(arr[i][0], arr[i][1],arr[i + 1][0], arr[i + 1][1]);
+            //console.log(arr[i][0], arr[i][1],arr[i + 1][0], arr[i + 1][1]);
         }
     }
 }
@@ -68,8 +69,31 @@ let myCat = new Cat();
 myCat.draw(mCat1);
 myCat.draw(mCat2);
 myCat.draw(mSoed);
+let CatLeft = new Cat();
+let CatBack = new Cat();
+let CatTop = new Cat();
+
 let k = 1;
 let f = 0.01;
+
+let pLeft = [
+    [0,0,-1,0],
+    [0,1,0,0],
+    [1,0,0,0],
+    [0,0,0,1]
+]
+let pBack = [
+    [1,0,0,0],
+    [0,1,0,0],
+    [0,0,1,0],
+    [0,0,0,1]
+]
+let pTop = [
+    [1,0,0,0],
+    [0,0,1,0],
+    [0,-1,0,0],
+    [0,0,0,1]
+]
 document.addEventListener("keydown", function (event) {
     switch (event.key) {
         case "+":
@@ -157,9 +181,17 @@ document.addEventListener("keydown", function (event) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < catMatrix.length; i++) {
                 myCat.draw(catMatrix[i]);
-        }
+            }
+        break;
+        //проекции
+        case "p":
+            CreatePTop(20,-30);
+            CreatePLeft(-20,-30);
+            CreatePBack(0, -30)
+            console.log("p");
         break;
     }
+    
 })
 let mtxRotateZ = [
     [Math.cos(f), Math.sin(f), 0, 0],
@@ -174,13 +206,13 @@ let mtxRotateY = [
     [0,0,0,1]
 ]
 
-    let mtxRotateX=[
-        [1,0,0,0],
-        [0,Math.cos(f), Math.sin(f),  0],
-        [0,-Math.sin(f),Math.cos(f), 0],
-        [0,0,0,1]
-    ]
-//-----------------------------Поворот по оси аппликат-------------------------------
+let mtxRotateX=[
+    [1,0,0,0],
+    [0,Math.cos(f), Math.sin(f),  0],
+    [0,-Math.sin(f),Math.cos(f), 0],
+    [0,0,0,1]
+]
+//-----------------------------Поворот---------------------------------
 function RotateObj(A,mtxRotate){
     var rowsA = A.length,
         rowsB = mtxRotate.length,
@@ -192,7 +224,7 @@ function RotateObj(A,mtxRotate){
                 A[i][k] = t;//Number(t.toFixed(1));
             }
         }
-        console.log("A ", A)
+        //console.log("A ", A)
         return A;
 }
 //-----------------------------------------------------------------
@@ -205,4 +237,46 @@ function Scale(A,k){
         [0, 0, 0, 1]
     ]
     MultiplyMatrix(A, scaleMatrix);
+}
+//-------------------------------Перемещение----------------------------------------
+function MoveObj(mtx,x,y){
+    let mtxMove = [
+        [1,0,0,0],
+        [0,1,0,0],
+        [0,0,1,0],
+        [x,y,0,1]
+    ]
+    MultiplyMatrix(mtx, mtxMove);
+    //console.log(mtx);
+}
+//------------------------Ортографичекая проекция-----------------------------
+function CreatePLeft(x,y){
+    MultiplyMatrix(mCat1, pLeft);
+    MultiplyMatrix(mCat2, pLeft);
+    MultiplyMatrix(mSoed, pLeft);
+    MoveObj(mCat1,x,y);
+    MoveObj(mCat2,x,y);
+    MoveObj(mSoed,x,y);
+    for (let i = 0; i < catMatrix.length; i++) {
+        CatLeft.draw(catMatrix[i]);
+    }
+}
+function CreatePBack(x,y){
+    MultiplyMatrix(pcat1, pBack);
+    MoveObj(pcat1,x,y)
+    for (let i = 0; i < pMas.length; i++) {
+        CatBack.draw(pMas[i]);
+
+    }
+}
+function CreatePTop(x,y){
+    MultiplyMatrix(cat1, pTop);
+    MultiplyMatrix(cat2, pTop);
+    MultiplyMatrix(soed, pTop);
+    MoveObj(cat1,x,y);
+    MoveObj(cat2,x,y);
+    MoveObj(soed,x,y);
+    for (let i = 0; i < catMas.length; i++) {
+        CatTop.draw(catMas[i]);
+    }
 }
