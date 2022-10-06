@@ -188,29 +188,3 @@ let catMatrix = [
    mCat2,
    mSoed
 ];
-let cat1 = addElem(mCat1);
-let cat2 = addElem(mCat2);
-let soed = addElem(mSoed);
-let pcat1 = addElem(mCat1);
-let pcat2 = addElem(mCat2);
-let psoed = addElem(mSoed);
-let pMas = [
-    pcat1,
-    pcat2,
-    psoed
-];
-let catMas = [
-    cat1,
-    cat2,
-    soed
-];
-function addElem(masOut){
-    let masInp = [];
-    for(var i = 0; i < masOut.length; i++){
-        masInp[i] = [];
-        for(var j = 0; j < masOut[i].length; j++){
-            masInp[i][j] = masOut[i][j];
-        }
-    }
-    return masInp;
-}

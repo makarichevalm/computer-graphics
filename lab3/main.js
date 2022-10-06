@@ -75,11 +75,10 @@ let CatTop = new Cat();
 
 let k = 1;
 let f = 0.01;
-
 let pLeft = [
-    [0,0,-1,0],
+    [0,0,1,0],
     [0,1,0,0],
-    [1,0,0,0],
+    [-1,0,0,0],
     [0,0,0,1]
 ]
 let pBack = [
@@ -90,8 +89,8 @@ let pBack = [
 ]
 let pTop = [
     [1,0,0,0],
-    [0,0,1,0],
-    [0,-1,0,0],
+    [0,0,-1,0],
+    [0,1,0,0],
     [0,0,0,1]
 ]
 document.addEventListener("keydown", function (event) {
@@ -185,11 +184,20 @@ document.addEventListener("keydown", function (event) {
         break;
         //проекции
         case "p":
-            CreatePTop(20,-30);
-            CreatePLeft(-20,-30);
-            CreatePBack(0, -30)
+           CreatePTop(20,-30);
+            //CreatePLeft(-20,-30);
+            //CreatePBack(0, -30)
             console.log("p");
         break;
+        case "q":
+            CreatePLeft(-20,-30);
+            console.log("q");
+        break;
+        case "o":
+            CreatePBack(0, -30);
+            console.log("o");
+        break;
+
     }
     
 })
@@ -262,21 +270,25 @@ function CreatePLeft(x,y){
     }
 }
 function CreatePBack(x,y){
-    MultiplyMatrix(pcat1, pBack);
-    MoveObj(pcat1,x,y)
-    for (let i = 0; i < pMas.length; i++) {
-        CatBack.draw(pMas[i]);
+    MultiplyMatrix(mCat1, pBack);
+    MultiplyMatrix(mCat2, pBack);
+    MultiplyMatrix(mSoed, pBack);
+    MoveObj(mCat1,x,y)
+    MoveObj(mCat2,x,y)
+    MoveObj(mSoed,x,y)
+    for (let i = 0; i < catMatrix.length; i++) {
+        CatBack.draw(catMatrix[i]);
 
     }
 }
 function CreatePTop(x,y){
-    MultiplyMatrix(cat1, pTop);
-    MultiplyMatrix(cat2, pTop);
-    MultiplyMatrix(soed, pTop);
-    MoveObj(cat1,x,y);
-    MoveObj(cat2,x,y);
-    MoveObj(soed,x,y);
-    for (let i = 0; i < catMas.length; i++) {
-        CatTop.draw(catMas[i]);
+    MultiplyMatrix(mCat1, pTop);
+    MultiplyMatrix(mCat2, pTop);
+    MultiplyMatrix(mSoed, pTop);
+    MoveObj(mCat1,x,y);
+    MoveObj(mCat2,x,y);
+    MoveObj(mSoed,x,y);
+    for (let i = 0; i < catMatrix.length; i++) {
+        CatTop.draw(catMatrix[i]);
     }
 }
