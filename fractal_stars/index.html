@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Stars</title>
+   </head>
+   <body>
+      <canvas id="myCanvas" width="600" height="600"></canvas>
+      <script>
+         var myCanvas = document.getElementById("myCanvas");
+         var ctx = myCanvas.getContext("2d");
+         const it = 1280,
+            r = 0.35,
+            l = 500, //масштаб
+            da = (4 * Math.PI) / 5,
+            v = 4; //глубина
+         function Parts(nn) {
+            if (nn % Math.pow(v, 4) == 0) return 1;
+            else if (nn % Math.pow(v, 3) == 0) return r;
+            else if (nn % Math.pow(v, 2) == 0) return Math.pow(r, 2);
+            else if (nn % v == 0) return Math.pow(r, 3);
+            else return Math.pow(r, 4);
+         }
+         function drawLine(x1, y1, x2, y2) {
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+         }
+         function drawStars() {
+            var a = 0,
+               x = 250,
+               y = 550;
+            var xn, yn;
+            for (let i = 0; i < it; i++) {
+               xn = x + Math.sin(a) * l * Parts(i);
+               yn = y - Math.cos(a) * l * Parts(i);
+               ctx.beginPath();
+               ctx.strokeStyle = "black";
+               ctx.lineWidth = "1";
+               drawLine(
+                  Math.round(x),
+                  Math.round(y),
+                  Math.round(xn),
+                  Math.round(yn)
+               );
+               ctx.stroke();
+               x = xn;
+               y = yn;
+               a = a + da;
+            }
+         }
+         drawStars();
+      </script>
+   </body>
+</html>
